@@ -87,9 +87,9 @@
       const hello = h < 12 ? 'Good morning' : h < 18 ? 'Good afternoon' : 'Good evening';
       return '<div class="page-h"><div><h1>' + hello + ', ' + esc(u.name.split(' ')[0]) + '</h1><p>' + new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' }) + ' · ' + esc(LF.S.settings.company.workspace) + '</p></div>' +
         '<div class="acts"><a class="btn" href="#/leads">' + icon('users', 'sm') + ' View all leads</a></div></div>' +
-        '<div class="hero"><div style="position:relative;z-index:1"><h2>See LeadFlow work in real time</h2><p>Submit a sample website enquiry and watch the system create the lead, send an acknowledgement email, assign a salesperson and schedule the first follow-up — in seconds.</p>' +
+        '<div class="hero"><div style="position:relative;z-index:1"><h2>Capture a new enquiry</h2><p>Log a website enquiry and LeadFlow creates the lead, sends an acknowledgement email, assigns a salesperson and schedules the first follow-up.</p>' +
         '<div class="hero-steps"><span>1 Lead received</span><span>2 Record created</span><span>3 Email sent</span><span>4 Salesperson assigned</span><span>5 Follow-up scheduled</span><span>6 Team notified</span></div></div>' +
-        '<button class="btn lg" id="simulate-btn" data-action="sim-open">' + icon('play', 'sm') + ' Simulate New Enquiry</button></div>' +
+        '<button class="btn lg" id="simulate-btn" data-action="sim-open">' + icon('play', 'sm') + ' New Enquiry</button></div>' +
         kpis(s) +
         '<div class="grid g-main"><div class="stack" style="gap:16px">' +
         ui.card('Lead overview', '<div class="chart-box"><canvas id="ch-overview" aria-label="Lead overview chart"></canvas></div>', { sub: 'New, contacted and converted leads · ' + s.r.label.toLowerCase() }) +

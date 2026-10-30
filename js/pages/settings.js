@@ -39,7 +39,7 @@
   const row = (title, desc, ctl) => '<div class="setting-row"><div><b>' + title + '</b><div class="d">' + desc + '</div></div>' + ctl + '</div>';
   const saveBar = (id) => '<div class="row" style="justify-content:flex-end;margin-top:18px"><button class="btn primary" type="submit" form="' + id + '">' + icon('save', 'sm') + ' Save changes</button></div>';
 
-  const TABS = [['company', 'Company profile', 'building'], ['form', 'Website enquiry form', 'globe'], ['assignment', 'Lead assignment', 'users'], ['notifications', 'Notifications', 'bell'], ['automation', 'Automation preferences', 'zap'], ['data', 'Demo data', 'refresh']];
+  const TABS = [['company', 'Company profile', 'building'], ['form', 'Website enquiry form', 'globe'], ['assignment', 'Lead assignment', 'users'], ['notifications', 'Notifications', 'bell'], ['automation', 'Automation preferences', 'zap'], ['data', 'Data', 'refresh']];
 
   function company() {
     const c = LF.S.settings.company, tz = ['America/Chicago (CT)', 'America/New_York (ET)', 'America/Denver (MT)', 'America/Los_Angeles (PT)'];
@@ -70,7 +70,7 @@
     return ui.card('Notification preferences', '<form id="set-form-n" data-submit="set-notif">' +
       row('Email notifications', 'Email the salesperson when a lead is assigned.', sw('email', n.email)) + row('In-app notifications', 'Show alerts in the notification bell.', sw('inApp', n.inApp)) + row('Daily digest', 'Morning summary of new leads and tasks due.', sw('digest', n.digest)) +
       row('Overdue follow-up alerts', 'Alert when a follow-up passes its due time.', sw('overdue', n.overdue)) + row('Escalation alerts to manager', 'Notify the sales manager about uncontacted leads.', sw('escalation', n.escalation)) +
-      '<div class="field" style="margin-top:14px;max-width:320px"><label for="n-lead">Reminder lead time</label><select id="n-lead" name="reminderLead">' + ui.opts([{ v: 15, l: '15 minutes before due' }, { v: 30, l: '30 minutes before due' }, { v: 60, l: '1 hour before due' }, { v: 120, l: '2 hours before due' }], n.reminderLead) + '</select><span class="hint">Updates the “Lead Follow-Up Reminder” rule.</span></div>' + saveBar('set-form-n') + '</form>', { sub: 'Choose how your team is kept informed. Notifications are simulated in this demo.' });
+      '<div class="field" style="margin-top:14px;max-width:320px"><label for="n-lead">Reminder lead time</label><select id="n-lead" name="reminderLead">' + ui.opts([{ v: 15, l: '15 minutes before due' }, { v: 30, l: '30 minutes before due' }, { v: 60, l: '1 hour before due' }, { v: 120, l: '2 hours before due' }], n.reminderLead) + '</select><span class="hint">Updates the “Lead Follow-Up Reminder” rule.</span></div>' + saveBar('set-form-n') + '</form>', { sub: 'Choose how your team is kept informed.' });
   }
   function automationPrefs() {
     const a = LF.S.settings.automation;
@@ -81,7 +81,7 @@
   }
   function dataTab() {
     let size = 0; try { size = (localStorage.getItem('leadflow-demo-v1') || '').length; } catch (e) { /* ignore */ }
-    return ui.card('Demo data', '<p class="muted" style="margin-bottom:14px">LeadFlow is running in demo mode. All ' + LF.S.leads.length + ' leads, ' + LF.S.tasks.length + ' tasks and ' + LF.S.runs.length + ' automation runs are sample data for Horizon Realty, stored only in this browser (' + (size / 1024).toFixed(0) + ' KB).</p><div class="row wrap"><button class="btn" data-action="data-export">' + icon('download', 'sm') + ' Download data (JSON)</button><button class="btn danger-ghost" data-action="reset-demo">' + icon('refresh', 'sm') + ' Reset demo data</button></div>');
+    return ui.card('Data', '<p class="muted" style="margin-bottom:14px">' + LF.S.leads.length + ' leads, ' + LF.S.tasks.length + ' tasks and ' + LF.S.runs.length + ' automation runs, stored in this browser (' + (size / 1024).toFixed(0) + ' KB).</p><div class="row wrap"><button class="btn" data-action="data-export">' + icon('download', 'sm') + ' Download data (JSON)</button><button class="btn danger-ghost" data-action="reset-demo">' + icon('refresh', 'sm') + ' Reset data</button></div>');
   }
 
   LF.pages.settings = {
@@ -123,8 +123,8 @@
   A['enq-preview-submit'] = function (form) {
     const d = LF.readEnquiry(form); if (!d) return;
     const m = document.querySelector('#modal-root .modal-b');
-    m.innerHTML = '<div class="success-msg"><div class="big">' + icon('check', 'lg') + '</div><h3 style="margin-bottom:6px">Enquiry submitted</h3><p class="muted" style="max-width:420px;margin:0 auto">' + esc(LF.S.settings.form.success) + '</p><p class="xs muted" style="margin-top:14px">Preview only — no lead was created.</p></div>';
-    document.querySelector('#modal-root .modal-f').innerHTML = '<button class="btn" data-action="modal-close">Close</button><button class="btn primary" data-action="sim-open">' + icon('play', 'sm') + ' Run as live simulation</button>';
+    m.innerHTML = '<div class="success-msg"><div class="big">' + icon('check', 'lg') + '</div><h3 style="margin-bottom:6px">Enquiry submitted</h3><p class="muted" style="max-width:420px;margin:0 auto">' + esc(LF.S.settings.form.success) + '</p></div>';
+    document.querySelector('#modal-root .modal-f').innerHTML = '<button class="btn" data-action="modal-close">Close</button><button class="btn primary" data-action="sim-open">' + icon('play', 'sm') + ' Submit as real enquiry</button>';
   };
   A['set-assign'] = function (form) {
     const d = Object.fromEntries(new FormData(form).entries()), a = LF.S.settings.assignment;
@@ -144,6 +144,6 @@
   };
   A['data-export'] = function () {
     const blob = new Blob([JSON.stringify(LF.S, null, 2)], { type: 'application/json' }), url = URL.createObjectURL(blob), a = document.createElement('a');
-    a.href = url; a.download = 'leadflow-demo-data.json'; document.body.appendChild(a); a.click(); setTimeout(() => { URL.revokeObjectURL(url); a.remove(); }, 200); ui.toast('Data downloaded');
+    a.href = url; a.download = 'leadflow-data.json'; document.body.appendChild(a); a.click(); setTimeout(() => { URL.revokeObjectURL(url); a.remove(); }, 200); ui.toast('Data downloaded');
   };
 })();

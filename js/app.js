@@ -36,11 +36,7 @@
         const badge = n.id === 'tasks' && overdue ? '<span class="nav-count">' + overdue + '</span>' : n.id === 'leads' && newLeads ? '<span class="nav-count soft">' + newLeads + ' new</span>' : '';
         return '<a class="nav-item' + (r.name === n.id ? ' active' : '') + '" href="#/' + n.id + '" data-tip="' + esc(n.label) + '" data-action="nav-click">' + icon(n.icon) + '<span class="nl">' + n.label + '</span>' + badge + '</a>';
       }).join('') + '</nav>' +
-      '<div class="sb-foot"><div class="sb-demo"><b>' + icon('info', 'sm') + ' Demo Mode</b>Sample data only. No real emails are sent.</div>' +
-      '<div class="sb-user">' + ui.avatar(u.name) + '<div class="ut"><b>' + esc(u.name) + '</b><span>' + esc(u.role) + '</span></div></div></div>';
-  }
-  function renderBanner() {
-    document.getElementById('demo-banner').innerHTML = '<span class="dot"></span><span><b>Demo Mode</b> — you are exploring sample data for ' + esc(LF.S.settings.company.name) + '. <span class="hide-xs">Changes are saved in this browser only and no real emails are sent.</span></span> <button data-action="reset-demo">Reset demo data</button>';
+      '<div class="sb-foot"><div class="sb-user">' + ui.avatar(u.name) + '<div class="ut"><b>' + esc(u.name) + '</b><span>' + esc(u.role) + '</span></div></div></div>';
   }
   function renderTopbar() {
     const u = q.user();
@@ -55,8 +51,7 @@
       '<button class="btn icon ghost help-btn" data-action="open-help" aria-label="Help">' + icon('help') + '</button>' +
       '<div class="dd" id="dd-user"><button class="btn ghost" data-action="dd-toggle" style="padding:0 6px" aria-label="User menu">' + ui.avatar(u.name, 'sm') + '<span class="hide-sm">' + esc(u.name.split(' ')[0]) + '</span>' + icon('chevron-down', 'sm') + '</button><div class="dd-menu">' +
       '<div style="padding:10px 10px 8px"><b>' + esc(u.name) + '</b><div class="muted sm">' + esc(u.email) + '</div></div><div class="dd-sep"></div>' +
-      '<a class="dd-item" href="#/settings">' + icon('settings') + 'Settings</a><a class="dd-item" href="#/team">' + icon('users') + 'Team members</a><button class="dd-item" data-action="open-help">' + icon('help') + 'Help & demo guide</button><div class="dd-sep"></div>' +
-      '<button class="dd-item danger" data-action="reset-demo">' + icon('refresh') + 'Reset demo data</button></div></div>';
+      '<a class="dd-item" href="#/settings">' + icon('settings') + 'Settings</a><a class="dd-item" href="#/team">' + icon('users') + 'Team members</a><button class="dd-item" data-action="open-help">' + icon('help') + 'Help</button></div></div>';
     bindSearch();
   }
   const NOTIF_IC = { lead: 'user-plus', reminder: 'clock', alert: 'alert', win: 'check-circle' };
@@ -132,19 +127,19 @@
   A['set-range'] = (el) => { LF.S.ui.range = Number(el.dataset.days); LF.save(); App.refresh(); ui.toast('Date range set to last ' + LF.S.ui.range + ' days', 'info'); };
   A['notif-read-all'] = () => { LF.S.notifications.forEach((n) => (n.read = true)); LF.save(); updateChrome(); document.getElementById('dd-notif').classList.add('open'); };
   A['notif-open'] = (el) => { const n = LF.S.notifications.find((x) => x.id === el.dataset.id); if (!n) return; n.read = true; LF.save(); if (n.leadId && q.lead(n.leadId)) location.hash = '#/leads/' + n.leadId; else updateChrome(); };
-  A['reset-demo'] = () => ui.confirm({ title: 'Reset demo data?', message: 'This restores the original Horizon Realty sample data and discards every change you have made in this browser.', confirmLabel: 'Reset demo', danger: true, onConfirm: () => { LF.resetData(); location.hash = '#/dashboard'; App.render(); ui.toast('Demo data restored'); } });
+  A['reset-demo'] = () => ui.confirm({ title: 'Reset data?', message: 'This restores the original data set and discards every change you have made in this browser.', confirmLabel: 'Reset data', danger: true, onConfirm: () => { LF.resetData(); location.hash = '#/dashboard'; App.render(); ui.toast('Data restored'); } });
   A['open-help'] = () => {
     ui.modal({
-      title: 'Help & demo guide', subtitle: 'How to explore LeadFlow in two minutes', size: 'md',
+      title: 'Help', subtitle: 'Getting around LeadFlow', size: 'md',
       body: '<div class="stack" style="gap:14px">' + [
-        ['play', 'Run the live simulation', 'On the Dashboard, click <b>Simulate New Enquiry</b> and watch a website enquiry become a lead, an email, an assignment and a follow-up in seconds.'],
-        ['users', 'Work a lead', 'Open any lead to change status, reassign, add notes, schedule follow-ups or send a simulated email. Every action appears in the activity timeline.'],
-        ['zap', 'Edit the automation', 'In <b>Automation Rules</b> turn rules on and off, change the workflow, then run the simulation again to see the effect.'],
-        ['chart', 'Check the numbers', 'Dashboard, Team and Reports all read from the same sample data, so every change flows through.'],
+        ['play', 'Capture enquiries', 'Website enquiries become leads automatically, with an acknowledgement email, an assigned salesperson and a scheduled follow-up.'],
+        ['users', 'Work a lead', 'Open any lead to change status, reassign, add notes, schedule follow-ups or send an email. Every action appears in the activity timeline.'],
+        ['zap', 'Edit the automation', 'In <b>Automation Rules</b> turn rules on and off, change the workflow, and changes apply to every new enquiry.'],
+        ['chart', 'Check the numbers', 'Dashboard, Team and Reports all read from the same data, so every change flows through.'],
       ].map((s) => '<div class="row" style="align-items:flex-start"><div class="type-ic green">' + icon(s[0]) + '</div><div><b>' + s[1] + '</b><p class="muted sm">' + s[2] + '</p></div></div>').join('') + '</div>' +
         '<div class="dd-sep" style="margin:16px 0"></div><p class="lbl" style="margin-bottom:8px">Shortcuts</p><div class="row wrap sm"><span class="badge">/</span> focus search <span class="badge">Esc</span> close dialogs and menus</div>' +
-        '<p class="muted sm" style="margin-top:14px">All data is fictional and stored in your browser (localStorage). No emails, SMS or notifications are ever sent.</p>',
-      footer: '<button class="btn" data-action="modal-close">Close</button><button class="btn primary" data-action="sim-open">' + icon('play', 'sm') + ' Run live demo</button>',
+        '',
+      footer: '<button class="btn" data-action="modal-close">Close</button><button class="btn primary" data-action="sim-open">' + icon('plus', 'sm') + ' New enquiry</button>',
     });
   };
 
@@ -183,7 +178,7 @@
   /* ---------- boot ---------- */
   function boot() {
     LF.init();
-    renderBanner(); renderTopbar();
+    renderTopbar();
     if (!location.hash) history.replaceState(null, '', '#/dashboard');
     App.render();
     App.runChecks(true);

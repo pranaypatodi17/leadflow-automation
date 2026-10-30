@@ -22,7 +22,7 @@
     const rows = all.slice((v.page - 1) * v.size, v.page * v.size);
     if (!all.length) {
       const filtered = v.q || v.status || v.source || v.owner;
-      return ui.empty('search', filtered ? 'No leads match your filters' : 'No leads yet', filtered ? 'Try a different search term or clear the filters.' : 'Add your first lead or simulate a website enquiry.', filtered ? '<button class="btn" data-action="leads-clear">Clear filters</button>' : '<button class="btn primary" data-action="lead-add">Add New Lead</button>');
+      return ui.empty('search', filtered ? 'No leads match your filters' : 'No leads yet', filtered ? 'Try a different search term or clear the filters.' : 'Add your first lead or capture a website enquiry.', filtered ? '<button class="btn" data-action="leads-clear">Clear filters</button>' : '<button class="btn primary" data-action="lead-add">Add New Lead</button>');
     }
     return '<div class="table-wrap"><table class="tbl"><thead><tr><th>Lead</th><th class="hide-md">Contact</th><th>Source</th><th class="hide-sm">Assigned to</th><th>Status</th><th class="hide-sm right">Value</th><th class="sortable" data-action="leads-sort-date">Received ' + (v.sort === 'newest' ? '↓' : v.sort === 'oldest' ? '↑' : '') + '</th><th class="hide-sm">Next follow-up</th></tr></thead><tbody>' +
       rows.map((l) => {
