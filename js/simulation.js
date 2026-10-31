@@ -11,9 +11,9 @@
     if (running) return;
     const sample = LF.SAMPLE_ENQUIRIES[idx % LF.SAMPLE_ENQUIRIES.length];
     const off = !liveRule();
-    ui.modal({ title: 'Simulate a new website enquiry', subtitle: 'This is the form your website visitors fill in. Use the sample or type your own details.', size: 'md',
+    ui.modal({ title: 'New website enquiry', subtitle: 'This is the form your website visitors fill in.', size: 'md',
       body: (off ? '<div class="flag-banner" style="background:var(--amber-soft);border-color:#f3dfae;color:#7a5300">' + icon('alert') + '<div><b>The enquiry automation is switched off.</b> The lead will be saved but nobody will be notified, no email will be sent and nothing will be scheduled — exactly how enquiries get missed.</div></div>' : '') +
-        '<div class="row wrap" style="margin-bottom:12px;gap:6px"><span class="muted sm">Quick fill:</span>' + LF.SAMPLE_ENQUIRIES.map((s, i) => '<button type="button" class="btn sm" data-action="sim-sample" data-i="' + i + '">' + esc(s.name.split(' ')[0]) + '</button>').join('') + '</div>' +
+        '<div class="row wrap" style="margin-bottom:12px;gap:6px"><span class="muted sm">Prefill:</span>' + LF.SAMPLE_ENQUIRIES.map((s, i) => '<button type="button" class="btn sm" data-action="sim-sample" data-i="' + i + '">' + esc(s.name.split(' ')[0]) + '</button>').join('') + '</div>' +
         LF.enquiryFormHtml(sample, { submit: 'sim-submit' }),
       footer: '<button class="btn" data-action="modal-close">Cancel</button><button class="btn primary lg" type="submit" form="enq-form">' + icon('send', 'sm') + ' ' + esc(LF.S.settings.form.button) + '</button>' });
   };
@@ -101,12 +101,12 @@
       (l ? '<a class="btn sm" href="#/leads/' + l.id + '" data-action="sim-goto" data-href="#/leads/' + l.id + '">' + icon('users', 'xs') + ' Lead in Leads</a>' : '') + '<a class="btn sm" href="#/dashboard" data-action="sim-goto" data-href="#/dashboard">' + icon('dashboard', 'xs') + ' Dashboard stats</a>' +
       (email ? '<button class="btn sm" data-action="sim-view-email">' + icon('mail', 'xs') + ' Generated email</button>' : '') + (task ? '<a class="btn sm" href="#/tasks" data-action="sim-goto" data-href="#/tasks?tab=' + (task.due < LF.sod(Date.now()) + LF.T.DAY ? 'today' : 'upcoming') + '">' + icon('tasks', 'xs') + ' Follow-up tasks</a>' : '') +
       (run ? '<a class="btn sm" href="#/automation" data-action="sim-goto" data-href="#/automation">' + icon('zap', 'xs') + ' Execution history</a>' : '') + '</div>';
-    summaryFooter = '<button class="btn" data-action="modal-close">Close</button><button class="btn" data-action="sim-again">' + icon('refresh', 'sm') + ' Simulate another</button>' + (l ? '<button class="btn primary" data-action="sim-goto" data-href="#/leads/' + l.id + '">Open lead profile ' + icon('arrow-right', 'sm') + '</button>' : '');
+    summaryFooter = '<button class="btn" data-action="modal-close">Close</button><button class="btn" data-action="sim-again">' + icon('refresh', 'sm') + ' Add another</button>' + (l ? '<button class="btn primary" data-action="sim-goto" data-href="#/leads/' + l.id + '">Open lead profile ' + icon('arrow-right', 'sm') + '</button>' : '');
     renderSummary();
   }
   function renderSummary() {
     const m = document.querySelector('#modal-root .modal'); if (!m) return;
-    m.querySelector('.modal-h h3').textContent = 'Simulation complete';
+    m.querySelector('.modal-h h3').textContent = 'Enquiry processed';
     m.querySelector('.modal-b').innerHTML = summaryHtml;
     let f = m.querySelector('.modal-f'); if (!f) { f = document.createElement('footer'); f.className = 'modal-f'; m.appendChild(f); }
     f.innerHTML = summaryFooter;

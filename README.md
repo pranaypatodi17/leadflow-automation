@@ -1,8 +1,8 @@
-# LeadFlow — Lead Follow-Up Automation (interactive demo)
+# LeadFlow — Lead Follow-Up Automation 
 
-A static, front-end-only SaaS demo for **Horizon Realty** showing how website enquiries are captured, acknowledged, assigned to a salesperson and followed up — automatically.
+A static, front-end-only app for **Horizon Realty** showing how website enquiries are captured, acknowledged, assigned to a salesperson and followed up — automatically.
 
-> **Demo mode:** all data is fictional and lives in your browser's `localStorage`. No backend, no real emails or notifications.
+> Data lives in your browser's `localStorage`. There is no backend; emails and notifications are logged, not sent.
 
 ## Run it
 

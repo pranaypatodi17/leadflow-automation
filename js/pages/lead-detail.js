@@ -123,15 +123,14 @@
   A['lead-reopen'] = function (el) { const l = q.lead(el.dataset.id); E.setStatus(l, 'Contacted'); LF.app.refresh(); ui.toast('Lead reopened as Contacted'); };
   A['lead-delete'] = function (el) {
     const l = q.lead(el.dataset.id);
-    ui.confirm({ title: 'Delete this lead?', message: 'This permanently removes <b>' + esc(l.name) + '</b> together with their follow-ups, notes and email history from the demo data.', confirmLabel: 'Delete lead', danger: true, onConfirm: () => { E.deleteLead(l); location.hash = '#/leads'; ui.toast('Lead deleted', 'info'); } });
+    ui.confirm({ title: 'Delete this lead?', message: 'This permanently removes <b>' + esc(l.name) + '</b> together with their follow-ups, notes and email history from LeadFlow.', confirmLabel: 'Delete lead', danger: true, onConfirm: () => { E.deleteLead(l); location.hash = '#/leads'; ui.toast('Lead deleted', 'info'); } });
   };
 
   /* ---------- send email ---------- */
   A['lead-email'] = function (el) {
     const l = q.lead(el.dataset.id), first = LF.S.templates[1];
     ui.modal({ title: 'Send email', subtitle: 'To ' + esc(l.name) + ' &lt;' + esc(l.email) + '&gt;', size: 'md',
-      body: '<div class="flag-banner" style="background:var(--blue-soft);border-color:#c9d9f6;color:#223e86">' + icon('info') + '<div>Demo mode: this email is simulated and will be logged on the lead, but nothing is actually sent.</div></div>' +
-        '<form id="email-form" data-submit="lead-email-submit" data-id="' + l.id + '"><div class="field"><label for="e-tpl">Template</label><select id="e-tpl" data-change="lead-email-tpl" data-id="' + l.id + '">' + ui.opts([{ v: '', l: 'Blank email' }].concat(LF.S.templates.map((t) => ({ v: t.id, l: t.name }))), first.id) + '</select></div>' +
+      body: '<form id="email-form" data-submit="lead-email-submit" data-id="' + l.id + '"><div class="field"><label for="e-tpl">Template</label><select id="e-tpl" data-change="lead-email-tpl" data-id="' + l.id + '">' + ui.opts([{ v: '', l: 'Blank email' }].concat(LF.S.templates.map((t) => ({ v: t.id, l: t.name }))), first.id) + '</select></div>' +
         '<div class="field"><label for="e-subj">Subject</label><input id="e-subj" name="subject" type="text" required></div><div class="field"><label for="e-body">Message</label><textarea id="e-body" name="body" rows="9" required></textarea></div></form>',
       footer: '<button class="btn" data-action="modal-close">Cancel</button><button class="btn primary" type="submit" form="email-form">' + icon('send', 'sm') + ' Send email</button>' });
     A['lead-email-tpl']({ value: first.id, dataset: { id: l.id } });
@@ -147,7 +146,7 @@
     const tid = document.getElementById('e-tpl').value;
     E.addComm({ leadId: l.id, channel: 'email', subject: subj, body, templateId: tid || null, by: q.user().id, status: 'Delivered' });
     E.timeline(l, 'email', 'Email sent: "' + subj + '"', q.user().name); E.activity('email_sent', 'Email sent to ' + l.name + ': ' + subj, l.id);
-    ui.closeModal(true); LF.view.leadTab = 'comms'; LF.save(); LF.app.refresh(); ui.toast('Email sent to ' + l.email + ' (simulated)');
+    ui.closeModal(true); LF.view.leadTab = 'comms'; LF.save(); LF.app.refresh(); ui.toast('Email sent to ' + l.email + '');
   };
   A['comm-view'] = function (el) {
     const c = LF.S.comms.find((x) => x.id === el.dataset.id), l = q.lead(c.leadId); if (!c) return;
